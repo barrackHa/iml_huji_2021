@@ -1,5 +1,8 @@
 FROM ubuntu:16.04
 
+ARG PORT=8800
+ENV PORT ${PORT}
+
 USER root
 
 RUN apt-get update && apt-get install -y wget bzip2 unzip \
@@ -11,13 +14,20 @@ RUN apt-get update && apt-get install -y wget bzip2 unzip \
     && mkdir /notebook
 
 RUN /miniconda/bin/pip3 install pylatexenc
+
+# Install file type convertion tool 
+RUN /miniconda/bin/pip3 install nbconvert \
+    && /miniconda/bin/conda install -c conda-forge pandoc \
+    && apt-get update && apt-get install -y pandoc \
+    && apt-get update && apt-get install -y texlive-xetex texlive-fonts-recommended texlive-generic-recommended texlive-generic-extra \
+    && /miniconda/bin/pip3 install pyppeteer
  
 VOLUME /notebook
 WORKDIR /notebook
-EXPOSE 8888
+EXPOSE $PORT
 
 CMD /miniconda/bin/jupyter notebook \
-                    --port=8888 \
+                    --port=${PORT} \
                     --no-browser \
                     --ip=0.0.0.0 \
                     --notebook-dir=/notebook \
