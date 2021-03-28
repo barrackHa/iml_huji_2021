@@ -13,15 +13,17 @@ RUN apt-get update && apt-get install -y wget bzip2 unzip \
     && /miniconda/bin/conda install jupyter scipy matplotlib \
     && mkdir /notebook
 
-RUN /miniconda/bin/pip3 install pylatexenc
-
 # Install file type convertion tool 
-RUN /miniconda/bin/pip3 install nbconvert \
+RUN /miniconda/bin/pip3 install nbconvert pylatexenc\
     && /miniconda/bin/conda install -c conda-forge pandoc \
     && apt-get update && apt-get install -y pandoc \
     && apt-get update && apt-get install -y texlive-xetex texlive-fonts-recommended texlive-generic-recommended texlive-generic-extra \
     && /miniconda/bin/pip3 install pyppeteer
  
+COPY ./environment.yml /
+RUN /miniconda/bin/conda env update -f "./environment.yml" \
+    && /miniconda/bin/conda install -c plotly plotly-orca 
+
 VOLUME /notebook
 WORKDIR /notebook
 EXPOSE $PORT
