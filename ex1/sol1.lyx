@@ -337,7 +337,8 @@ Let
 \begin_inset Formula $V$
 \end_inset
 
- and 
+ (i.e.
+ the eigenvectors of A) and 
 \begin_inset Formula $\{\lambda_{i}\}_{i=1}^{dim(v)}\subset field(V)$
 \end_inset
 
